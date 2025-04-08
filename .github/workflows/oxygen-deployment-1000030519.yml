@@ -25,7 +25,5 @@ jobs:
       - name: Login to Shopify
         run: shopify login --store=${{ secrets.SHOPIFY_STORE_URL }} --password=${{ secrets.SHOPIFY_API_TOKEN }}
         
-      - name: Build and Publish to Oxygen
+      - name: Deploy to Oxygen
         run: shopify hydrogen deploy --path=./dist
-        env:
-          SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000030519 }}
