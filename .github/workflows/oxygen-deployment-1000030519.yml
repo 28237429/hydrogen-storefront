@@ -19,23 +19,13 @@ jobs:
           node-version: "lts/*"
           check-latest: true
 
-      - name: Cache node modules
-        id: cache-npm
-        uses: actions/cache@v4
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli
 
-      - name: Install dependencies
-        run: npm ci
-
+      - name: Login to Shopify
+        run: shopify login --store=${{ secrets.SHOPIFY_STORE_URL }} --password=${{ secrets.SHOPIFY_API_TOKEN }}
+        
       - name: Build and Publish to Oxygen
-        run: npx shopify hydrogen deploy
+        run: shopify hydrogen deploy --path=./dist
         env:
           SHOPIFY_HYDROGEN_DEPLOYMENT_TOKEN: ${{ secrets.OXYGEN_DEPLOYMENT_TOKEN_1000030519 }}
